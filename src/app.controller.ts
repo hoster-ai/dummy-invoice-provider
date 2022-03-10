@@ -17,6 +17,7 @@ import {
 import { RequestDto } from './dtos/data.request.dto';
 import { ResponseDto } from './dtos/response.dto';
 import { InfoResponseDto } from './dtos/responses.dto';
+import { TaskResponseDto } from './dtos/task-response.dto';
 import { ApiExceptionFilter } from './exception.filter';
 
 @Controller()
@@ -55,10 +56,10 @@ export class AppController {
   @ApiOkResponse({ type: ResponseDto })
   @HttpCode(200)
   @Post('invoice')
-  async invoice(@Body() requestDto: RequestDto): Promise<ResponseDto> {
+  async invoice(
+    @Body() requestDto: RequestDto,
+  ): Promise<ResponseDto | TaskResponseDto> {
     let success = true;
-    let invoice_pdf = null;
-    let taskId = null;
 
     if (
       requestDto.orderData.orderId > 100 &&
@@ -69,18 +70,24 @@ export class AppController {
       requestDto.orderData.orderId > 500 &&
       requestDto.orderData.orderId < 600
     ) {
-      success = true;
-      invoice_pdf = 'url';
+      return {
+        code: 200,
+        message: 'Success',
+        success: true,
+        invoice_pdf: 'url',
+      };
     } else if (requestDto.orderData.orderId > 600) {
-      taskId = 'task_id';
+      return {
+        code: 200,
+        message: 'Success',
+        taskId: 'task_id',
+      };
     }
 
     return {
       code: 200,
       message: 'Success',
       success,
-      invoice_pdf,
-      taskId,
     };
   }
 }
