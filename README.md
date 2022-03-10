@@ -57,6 +57,13 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Dummy Responses
+
+- OrderId number 
+  - if number < 100 - result success true
+  - if number between 100-500 result success false
+  - If number >500 result success with invoice_pdf url
+
 ## Includes
 
 - Swagger (OpenAPI)

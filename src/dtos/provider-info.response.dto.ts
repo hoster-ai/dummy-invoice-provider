@@ -41,7 +41,7 @@ export class ProviderInfoDto {
   @ApiResponseProperty({ type: [ListActionDto] })
   listActions: ListActionDto[];
 
-  @ApiResponseProperty({ type: [ActionFieldDto] })
+  @ApiResponseProperty({ type: [TabDto] })
   settings: TabDto[];
 
   @ApiResponseProperty({ type: [MenuItemDto] })

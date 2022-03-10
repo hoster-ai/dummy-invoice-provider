@@ -1,5 +1,5 @@
 import { Axios } from 'axios';
-import { ProductDto } from 'src/dtos/product.dto';
+import { ProductDto } from '../dtos/product.dto';
 import { ICLient } from './client.interface';
 
 export class ProductClient implements ICLient<ProductDto> {

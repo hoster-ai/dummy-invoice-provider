@@ -1,79 +1,117 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsOptional,
-  IsMongoId,
+  IsArray,
+  IsDateString,
   IsDefined,
-  IsEnum,
-  IsIP,
+  IsMongoId,
+  IsNotEmpty,
   IsNumber,
+  IsObject,
+  IsString,
 } from 'class-validator';
+
 import { DurationEnum } from '../enums/duration.enum';
-import { IpTypeEnum } from '../enums/ip-type.enum';
 
-class IpDto {
-  @IsIP()
+class SummaryDto {
   @IsDefined()
-  @ApiProperty({
-    type: String,
-    example: '1.1.1.1',
-  })
-  address: string;
-
   @IsNumber()
-  @IsDefined()
   @ApiProperty({
     type: Number,
-    title: 'IP range',
+    title: 'Value',
+    example: 10,
   })
-  range: number;
+  value: number;
 
-  @IsEnum(IpTypeEnum)
   @IsDefined()
+  @IsNumber()
   @ApiProperty({
-    enum: IpTypeEnum,
-    example: IpTypeEnum.IPv4,
+    type: Number,
+    title: 'Vat',
+    example: 2,
   })
-  type: IpTypeEnum;
+  vat: number;
+
+  @IsDefined()
+  @IsNumber()
+  @ApiProperty({
+    type: Number,
+    title: 'Fee',
+    example: 1,
+  })
+  fee: number;
 }
 
-export class ProductDataDto {
-  @IsOptional()
-  @IsMongoId()
+export enum OrderStatusEnum {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELED = 'CANCELED',
+  REFUNDED = 'REFUNDED',
+}
+
+export class OrderProductDto {
+  @IsString()
   @ApiProperty({
     type: String,
-    example: '5ce45d7606444f199acfba1e',
+    example: 'Bronze plesk',
   })
-  id: string;
+  name: string;
 
-  @IsDefined()
+  @IsObject()
   @ApiProperty({
-    type: Object,
-    title: 'Provider options',
+    type: SummaryDto,
   })
-  options: Record<string, any>;
+  price: SummaryDto;
 
-  @IsDefined()
+  @IsNumber()
   @ApiProperty({
-    title: 'Provider meta',
-  })
-  meta: {
-    private: any;
-    public: any;
-  };
-
-  @IsDefined()
-  @IsEnum(DurationEnum)
-  @ApiProperty({
+    type: Number,
     enum: DurationEnum,
-    title: 'Duration in months',
     example: DurationEnum.ONE_YEAR,
   })
   duration: DurationEnum;
 
-  @IsOptional()
-  @ApiPropertyOptional({
-    type: IpDto,
-    isArray: true,
+  @IsString()
+  @IsDateString({ strict: true })
+  @ApiProperty({
+    type: Date,
+    title: 'start date',
+    example: '2019-09-26T07:58:30.996+0000',
   })
-  ips?: IpDto[];
+  startDate: Date;
+
+  @IsString()
+  @IsDateString({ strict: true })
+  @ApiProperty({
+    type: Date,
+    title: 'end date',
+    example: '2019-09-26T07:58:30.996+0000',
+  })
+  endDate: Date;
+}
+
+export class OrderDataDto {
+  @IsNumber()
+  @ApiProperty({
+    type: Number,
+    title: 'order ID',
+  })
+  orderId: number;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsArray()
+  @IsObject({ each: true })
+  @ApiProperty({
+    isArray: true,
+    type: OrderProductDto,
+  })
+  lines: OrderProductDto[];
+
+  @IsDefined()
+  @IsObject()
+  @ApiProperty({
+    type: SummaryDto,
+  })
+  summary: SummaryDto;
 }

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDefined, IsObject } from 'class-validator';
-import { ProductDataDto as ProductDataDto } from './product-data.request.dto';
-import { UserDataDto as UserDataDto } from './user-data.request.dto';
+import { OrderDataDto } from './product-data.request.dto';
+import { UserDataDto } from './user-data.request.dto';
 
 export class RequestDto {
   @IsDefined()
@@ -11,6 +11,6 @@ export class RequestDto {
 
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: ProductDataDto })
-  productData: ProductDataDto;
+  @ApiProperty({ type: OrderDataDto })
+  orderData: OrderDataDto;
 }

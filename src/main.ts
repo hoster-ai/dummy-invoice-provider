@@ -8,9 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Product Provider')
+    .setTitle('Invoice Provider')
     .setVersion('1.0')
-    .addTag('product-provider')
     .addBearerAuth({
       type: 'http',
       in: 'header',

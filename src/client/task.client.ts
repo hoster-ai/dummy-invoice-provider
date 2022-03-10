@@ -1,5 +1,5 @@
 import { Axios } from 'axios';
-import { TaskDto } from 'src/dtos/task.dto';
+import { TaskDto } from '../dtos/task.dto';
 import { ICLient } from './client.interface';
 
 export class TaskClient implements ICLient<any> {
