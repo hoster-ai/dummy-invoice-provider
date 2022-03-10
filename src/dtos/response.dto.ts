@@ -3,4 +3,5 @@ export class ResponseDto {
   message: string;
   success: boolean;
   invoice_pdf?: string;
+  taskId?: string;
 }

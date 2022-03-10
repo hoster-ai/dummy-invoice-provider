@@ -48,7 +48,9 @@ export class AppController {
   }
 
   /**
-   * @returns ProviderInfoResponseDto
+   *
+   * @param requestDto
+   * @returns
    */
   @ApiOkResponse({ type: ResponseDto })
   @HttpCode(200)
@@ -56,15 +58,21 @@ export class AppController {
   async invoice(@Body() requestDto: RequestDto): Promise<ResponseDto> {
     let success = true;
     let invoice_pdf = null;
+    let taskId = null;
 
     if (
       requestDto.orderData.orderId > 100 &&
       requestDto.orderData.orderId < 500
     ) {
       success = false;
-    } else {
+    } else if (
+      requestDto.orderData.orderId > 500 &&
+      requestDto.orderData.orderId < 600
+    ) {
       success = true;
       invoice_pdf = 'url';
+    } else if (requestDto.orderData.orderId > 600) {
+      taskId = 'task_id';
     }
 
     return {
@@ -72,6 +80,7 @@ export class AppController {
       message: 'Success',
       success,
       invoice_pdf,
+      taskId,
     };
   }
 }
