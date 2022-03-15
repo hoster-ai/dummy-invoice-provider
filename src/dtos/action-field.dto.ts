@@ -2,32 +2,33 @@ import { ApiResponseProperty } from '@nestjs/swagger';
 import { LabelTypeEnum } from '../enums/label.type.enum';
 
 export class ActionFieldDto {
+  @ApiResponseProperty()
   id: string;
 
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty()
   label: string;
 
   @ApiResponseProperty()
   value: string | number | { [key: string]: string };
 
-  @ApiResponseProperty({ enum: LabelTypeEnum })
+  @ApiResponseProperty()
   type: LabelTypeEnum;
 
-  @ApiResponseProperty({ type: Boolean })
+  @ApiResponseProperty()
   required: boolean;
 
-  @ApiResponseProperty({ type: Boolean })
+  @ApiResponseProperty()
   disabled = false;
 
-  @ApiResponseProperty({ type: Boolean })
+  @ApiResponseProperty()
   hidden = false;
 
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty()
   regexValidation: string;
 
-  @ApiResponseProperty({ type: Boolean })
+  @ApiResponseProperty()
   remoteValidation: boolean;
 
-  @ApiResponseProperty({ type: String })
+  @ApiResponseProperty()
   error?: string;
 }
