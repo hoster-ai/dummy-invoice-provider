@@ -167,4 +167,11 @@ export class UserDataDto {
     title: 'State',
   })
   state?: string;
+
+  @IsOptional()
+  @MaxLength(3)
+  @ApiPropertyOptional({
+    type: String,
+  })
+  currency?: string;
 }
