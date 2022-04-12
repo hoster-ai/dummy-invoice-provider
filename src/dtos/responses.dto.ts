@@ -1,7 +1,9 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { ActionFieldDto } from './action-field.dto';
 import { MetaDto } from './meta.response.dto';
+import { OrderDataDto } from './product-data.request.dto';
 import { ProviderInfoDto } from './provider-info.response.dto';
+import { UserDataDto } from './user-data.request.dto';
 
 export class BaseResponse {
   @ApiResponseProperty({
@@ -54,4 +56,14 @@ export class BooleanResponseDto extends BaseResponse {
     example: true,
   })
   result: boolean;
+}
+
+export class InvoiceSuccessResponseDto extends BaseResponse {
+  orderData: OrderDataDto[];
+  userData: UserDataDto;
+  invoice_pdf?: string;
+}
+
+export class InvoiceTaskResponseDto extends BaseResponse {
+  taskId: string;
 }

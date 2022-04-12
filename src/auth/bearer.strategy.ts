@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
-export class BearerStrategy extends PassportStrategy(Strategy) {
+export class BearerStrategy extends PassportStrategy(Strategy, 'bearer') {
   constructor() {
     super();
   }

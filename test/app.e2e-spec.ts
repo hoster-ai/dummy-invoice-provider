@@ -10,23 +10,25 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   const requestDto: RequestDto = {
-    orderData: {
-      orderId: 1,
-      lines: [
-        {
-          name: 'GR domain',
-          price: { value: 1, fee: 1, vat: 1 },
-          startDate: new Date(),
-          endDate: new Date(),
-          duration: DurationEnum.ONE_YEAR,
+    orderData: [
+      {
+        orderId: 1,
+        lines: [
+          {
+            name: 'GR domain',
+            price: { value: 1, fee: 1, vat: 1 },
+            startDate: new Date(),
+            endDate: new Date(),
+            duration: DurationEnum.ONE_YEAR,
+          },
+        ],
+        summary: {
+          fee: 1,
+          value: 10,
+          vat: 5,
         },
-      ],
-      summary: {
-        fee: 1,
-        value: 10,
-        vat: 5,
       },
-    },
+    ],
     userData: {
       firstName: 'First',
       lastName: 'last',
@@ -55,7 +57,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('GET - /info get info', async () => {
+  it.skip('GET - /info get info', async () => {
     return request(app.getHttpServer())
       .get('/info')
       .auth('test', { type: 'bearer' })
@@ -65,19 +67,35 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('POST - /invoice', async () => {
+  it('POST - /invoice with 1 order - expect sync response', async () => {
     return request(app.getHttpServer())
       .post('/invoice')
       .send(requestDto)
       .auth('test', { type: 'bearer' })
       .expect(200)
       .then((res) => {
-        expect(res.body.success).toBe(true);
+        expect(res.body.invoice_pdf).toBeDefined();
       });
   });
 
-  it('POST - /invoice', async () => {
-    requestDto.orderData.orderId = 200;
+  it('POST - /invoice with 2 orders - expect async response - task id', async () => {
+    requestDto.orderData.push({
+      orderId: 2,
+      lines: [
+        {
+          name: 'GR domain',
+          price: { value: 1, fee: 1, vat: 1 },
+          startDate: new Date(),
+          endDate: new Date(),
+          duration: DurationEnum.ONE_YEAR,
+        },
+      ],
+      summary: {
+        fee: 1,
+        value: 10,
+        vat: 5,
+      },
+    });
 
     return request(app.getHttpServer())
       .post('/invoice')
@@ -85,21 +103,54 @@ describe('AppController (e2e)', () => {
       .auth('test', { type: 'bearer' })
       .expect(200)
       .then((res) => {
-        expect(res.body.success).toBe(false);
+        expect(res.body.taskId).toBeDefined();
       });
   });
 
-  it('POST - /invoice', async () => {
-    requestDto.orderData.orderId = 600;
+  it('POST - /invoice with 3 orders - expect error', async () => {
+    requestDto.orderData.push(
+      {
+        orderId: 2,
+        lines: [
+          {
+            name: 'GR domain',
+            price: { value: 1, fee: 1, vat: 1 },
+            startDate: new Date(),
+            endDate: new Date(),
+            duration: DurationEnum.ONE_YEAR,
+          },
+        ],
+        summary: {
+          fee: 1,
+          value: 10,
+          vat: 5,
+        },
+      },
+      {
+        orderId: 3,
+        lines: [
+          {
+            name: 'GR domain',
+            price: { value: 1, fee: 1, vat: 1 },
+            startDate: new Date(),
+            endDate: new Date(),
+            duration: DurationEnum.ONE_YEAR,
+          },
+        ],
+        summary: {
+          fee: 1,
+          value: 10,
+          vat: 5,
+        },
+      },
+    );
 
     return request(app.getHttpServer())
       .post('/invoice')
       .send(requestDto)
       .auth('test', { type: 'bearer' })
-      .expect(200)
       .then((res) => {
-        expect(res.body.success).toBe(true);
-        expect(res.body.invoice_pdf).toBe('url');
+        expect(res.body.message).toBe('Error');
       });
   });
 });

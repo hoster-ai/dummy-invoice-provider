@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -7,6 +6,7 @@ import {
   HttpCode,
   Post,
   Body,
+  BadGatewayException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -15,9 +15,11 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RequestDto } from './dtos/data.request.dto';
-import { ResponseDto } from './dtos/response.dto';
-import { InfoResponseDto } from './dtos/responses.dto';
-import { TaskResponseDto } from './dtos/task-response.dto';
+import {
+  InfoResponseDto,
+  InvoiceSuccessResponseDto,
+  InvoiceTaskResponseDto,
+} from './dtos/responses.dto';
 import { ApiExceptionFilter } from './exception.filter';
 
 @Controller()
@@ -53,41 +55,26 @@ export class AppController {
    * @param requestDto
    * @returns
    */
-  @ApiOkResponse({ type: ResponseDto })
+  @ApiOkResponse({ type: InvoiceSuccessResponseDto || InvoiceTaskResponseDto })
   @HttpCode(200)
   @Post('invoice')
   async invoice(
     @Body() requestDto: RequestDto,
-  ): Promise<ResponseDto | TaskResponseDto> {
-    let success = true;
-
-    if (
-      requestDto.orderData.orderId > 100 &&
-      requestDto.orderData.orderId < 500
-    ) {
-      success = false;
-    } else if (
-      requestDto.orderData.orderId > 500 &&
-      requestDto.orderData.orderId < 600
-    ) {
+  ): Promise<InvoiceSuccessResponseDto | InvoiceTaskResponseDto> {
+    if (requestDto.orderData.length === 1) {
       return {
         code: 200,
         message: 'Success',
-        success: true,
         invoice_pdf: 'url',
-      };
-    } else if (requestDto.orderData.orderId > 600) {
+      } as InvoiceSuccessResponseDto;
+    } else if (requestDto.orderData.length === 2) {
       return {
         code: 200,
         message: 'Success',
-        taskId: 'task_id',
+        taskId: 'taskId',
       };
+    } else {
+      throw new BadGatewayException('Could not invoice orders');
     }
-
-    return {
-      code: 200,
-      message: 'Success',
-      success,
-    };
   }
 }

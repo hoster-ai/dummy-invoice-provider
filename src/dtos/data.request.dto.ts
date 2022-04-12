@@ -11,6 +11,6 @@ export class RequestDto {
 
   @IsDefined()
   @IsObject()
-  @ApiProperty({ type: OrderDataDto })
-  orderData: OrderDataDto;
+  @ApiProperty({ type: OrderDataDto, isArray: true })
+  orderData: OrderDataDto[];
 }
