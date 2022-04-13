@@ -10,7 +10,7 @@ export class RequestDto {
   userData: UserDataDto;
 
   @IsDefined()
-  @IsObject()
+  @IsObject({ each: true })
   @ApiProperty({ type: OrderDataDto, isArray: true })
   orderData: OrderDataDto[];
 }

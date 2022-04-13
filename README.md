@@ -59,10 +59,10 @@ $ npm run test:cov
 
 ## Dummy Responses
 
-- OrderId number 
-  - if number < 100 - result success true
-  - if number between 100-500 result success false
-  - If number >500 result success with invoice_pdf url
+- With this dummy we expect 3 different responses if:
+  - orderData length is 1, expect sync success response
+  - orderData length is 2, expect async taskId response
+  - orderData length is =>3, expect error
 
 ## Includes
 

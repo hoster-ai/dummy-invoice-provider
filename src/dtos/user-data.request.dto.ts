@@ -21,7 +21,7 @@ export class UserDataDto {
     type: String,
     example: '5ce45d7606444f199acfba1e',
   })
-  id: string;
+  id?: string;
 
   @IsOptional()
   @IsMongoId()

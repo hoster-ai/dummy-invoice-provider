@@ -66,6 +66,8 @@ export class AppController {
         code: 200,
         message: 'Success',
         invoice_pdf: 'url',
+        orderData: requestDto.orderData,
+        userData: requestDto.userData,
       } as InvoiceSuccessResponseDto;
     } else if (requestDto.orderData.length === 2) {
       return {
