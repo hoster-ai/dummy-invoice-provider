@@ -70,3 +70,21 @@ $ npm run test:cov
 - Passport (Authentication)
 - Class Validator (Validation)
 
+## Docker
+Build
+```
+docker build -t dummy-invoice:0.0.1 .
+```
+
+Run
+```
+docker run -p3002:3001 --rm -d dummy-invoice:0.0.1
+```
+
+Push
+```
+docker tag dummy-invoice:0.0.1 hosterai/dummy-invoice:0.0.1
+docker tag dummy-notification:0.0.1 hosterai/dummy-notification:latest
+docker push hosterai/dummy-invoice:0.0.1
+docker push hosterai/dummy-invoice:latest
+```
